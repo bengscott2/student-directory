@@ -49,9 +49,9 @@ def process_selection(selection)
   when "2"
     show_students
   when "3"
-    save_students
+    save_students(ask_for_filename)
   when "4"
-    load_students
+    load_students(ask_for_filename)
   when "9"
     exit
   else
@@ -59,24 +59,32 @@ def process_selection(selection)
   end
 end
 
-def save_students
+def save_students(filename)
   # open the file for writing
-  file = File.open("students.csv", "w")
+  file = File.open(filename, "w")
   # iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
+  puts "File succesfully saved."
   file.close
 end
 
-def load_students(filename = "students.csv")
+def ask_for_filename
+  puts "Please enter the filename you would like to use.."
+  filename = STDIN.gets.chomp
+  filename
+end
+
+def load_students(filename)
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
     add_student(name, cohort)
   end
+  puts "File successfully loaded."
   file.close
 end
 
@@ -98,7 +106,8 @@ end
 def try_load_students
   filename = ARGV.first # first argument from the command line
   if filename.nil? # get out of the method if it isn't given
-    load_students
+    puts "Loading files from students.csv"
+    load_students("students.csv")
   elsif File.exists?(filename) # if it exists
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
