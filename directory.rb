@@ -1,21 +1,12 @@
-  @students = []
+@students = []
 
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-  # get the first name
-  name = STDIN.gets.chomp
-  # while the name is not empty, repeat this code
-  while !name.empty? do
-    # add the student hash to the array
-    add_student(name, :november)
-    puts "Now we have #{@students.count} students"
-    # get another name from the user
-    name = STDIN.gets.chomp
-  end
+  add_student_loop(STDIN.gets.chomp)
 end
 
-def interactive_menu
+def interactive_menu_selector_loop
   loop do
     print_menu
     process_selection(STDIN.gets.chomp)
@@ -93,6 +84,17 @@ def add_student(name, cohort)
   @students << {name: name, cohort: cohort.to_sym}
 end
 
+def add_student_loop(name)
+  # while the name is not empty, repeat this code
+  while !name.empty? do
+    # add the student hash to the array
+    add_student(name, :november)
+    puts "Now we have #{@students.count} students"
+    # get another name from the user
+    name = STDIN.gets.chomp
+  end
+end
+
 def try_load_students
   filename = ARGV.first # first argument from the command line
   if filename.nil? # get out of the method if it isn't given
@@ -107,4 +109,4 @@ def try_load_students
 end
 
 try_load_students
-interactive_menu
+interactive_menu_selector_loop
