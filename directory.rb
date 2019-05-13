@@ -1,3 +1,5 @@
+require 'csv'
+
 @students = []
 
 def input_students
@@ -60,11 +62,10 @@ def process_selection(selection)
 end
 
 def save_students(filename)
-  File.open(filename, "w") do |file|
+  CSV.open(filename, 'wb') do |csv|
     @students.each do |student|
       student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      csv << student_data
     end
   end
   puts "File succesfully saved."
@@ -77,12 +78,11 @@ def ask_for_filename
 end
 
 def load_students(filename)
-  File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(',')
-      add_student(name, cohort)
-    end
+  CSV.foreach(filename) do |row|
+    name, cohort = row
+    add_student(name, cohort)
   end
+
   puts "File successfully loaded."
 end
 
