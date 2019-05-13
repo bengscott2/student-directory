@@ -18,8 +18,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save list of students"
+  puts "4. Load list of students"
   puts "9. Exit" # No. 9 because we'll be adding more options
 end
 
@@ -90,13 +90,27 @@ def add_student(name, cohort)
   @students << {name: name, cohort: cohort.to_sym}
 end
 
+def get_cohort
+  months = ["January", "February", "March", "April", "May", "June", "July",
+     "August", "September", "October", "November", "December"]
+  loop do
+    puts "Please enter the cohort for the student"
+    cohort = STDIN.gets.chomp
+    if months.include?(cohort)
+      return cohort.to_s
+    else
+      puts "You've entered an invalid month, please try again"
+    end
+  end
+end
+
 def add_student_loop(name)
   # while the name is not empty, repeat this code
   while !name.empty? do
     # add the student hash to the array
-    add_student(name, :november)
+    add_student(name, get_cohort)
     puts "Now we have #{@students.count} students"
-    # get another name from the user
+    puts "Please enter the name of the next student."
     name = STDIN.gets.chomp
   end
 end
