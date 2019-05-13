@@ -8,6 +8,10 @@ def input_students
   add_student_loop(STDIN.gets.chomp)
 end
 
+def add_student(name, cohort)
+  @students << {name: name, cohort: cohort.to_sym}
+end
+
 def interactive_menu_selector_loop
   loop do
     print_menu
@@ -21,6 +25,24 @@ def print_menu
   puts "3. Save list of students"
   puts "4. Load list of students"
   puts "9. Exit" # No. 9 because we'll be adding more options
+end
+
+def process_selection(selection)
+  case selection
+  when "1"
+    students = input_students
+  when "2"
+    show_students
+  when "3"
+    save_students(ask_for_filename)
+  when "4"
+    warning
+    load_students(ask_for_filename)
+  when "9"
+    exit
+  else
+    puts "I don't know what you mean try again."
+  end
 end
 
 def print_header
@@ -44,23 +66,6 @@ def show_students
   print_footer
 end
 
-def process_selection(selection)
-  case selection
-  when "1"
-    students = input_students
-  when "2"
-    show_students
-  when "3"
-    save_students(ask_for_filename)
-  when "4"
-    load_students(ask_for_filename)
-  when "9"
-    exit
-  else
-    puts "I don't know what you mean try again."
-  end
-end
-
 def save_students(filename)
   CSV.open(filename, 'wb') do |csv|
     @students.each do |student|
@@ -78,16 +83,13 @@ def ask_for_filename
 end
 
 def load_students(filename)
+  @students = []
   CSV.foreach(filename) do |row|
     name, cohort = row
     add_student(name, cohort)
   end
 
   puts "File successfully loaded."
-end
-
-def add_student(name, cohort)
-  @students << {name: name, cohort: cohort.to_sym}
 end
 
 def get_cohort
@@ -112,6 +114,17 @@ def add_student_loop(name)
     puts "Now we have #{@students.count} students"
     puts "Please enter the name of the next student."
     name = STDIN.gets.chomp
+  end
+end
+
+def warning
+  puts "Warning: If you proceed you will lose your current working directory"
+  puts "Please type 'yes' to proceed"
+  input = STDIN.gets.chomp
+  if input == "yes"
+    return
+  else
+    exit
   end
 end
 
