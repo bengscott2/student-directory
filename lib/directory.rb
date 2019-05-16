@@ -133,5 +133,5 @@ def try_load_students
 end
 
 
-try_load_students
-interactive_menu_selector_loop
+#try_load_students
+#interactive_menu_selector_loop
