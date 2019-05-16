@@ -11,3 +11,12 @@ describe 'process_selection' do
     expect {process_selection("10")}.to output("I don't know what you mean try again.\n").to_stdout
   end
 end
+
+describe 'print_footer' do
+  before(:all) do
+    @students = [{name: "Ben", cohort: :November}, {name: "Alexis", cohort: :November}]
+  end
+  it 'will output student count when 2 students are in @students' do
+    expect { print_footer }.to output("Overall, we have 2 great students\n").to_stdout
+  end
+end
